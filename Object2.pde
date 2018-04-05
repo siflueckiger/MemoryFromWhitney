@@ -34,7 +34,7 @@ class Object2 {
     it1 = 0.2;
     it2 = 0.05;
 
-    frameRate(20);
+    frameRate(13);
     
     println(xPos1, yPos1, dia1, xPos2, yPos2, dia2);
   }

@@ -6,6 +6,7 @@ import themidibus.*;
 //---- OBJECTS ----
 Object1 o1;
 Object2 o2;
+Object3 o3;
 
 MidiBus myBus;
 
@@ -32,7 +33,8 @@ void setup() {
   //create objects
   o1 = new Object1();
   o2 = new Object2();
-
+  o3 = new Object3();
+  
   //start listening to midi controller
   //MidiBus.list();
   myBus = new MidiBus(this, 0, 1);
@@ -49,6 +51,8 @@ void draw() {
     o1.show();
   } else if (screenValue == 2) {
     o2.show();
+  }else if (screenValue == 3) {
+    o3.show();
   }
 }
 
@@ -65,6 +69,11 @@ void keyPressed() {
     screenValue = 2;
 
     o2.init();
+    background(0);
+  } else if (key == '3') {
+    screenValue = 3;
+
+    o3.init();
     background(0);
   } else if (key == 'r') {
     screenValue = 1;
