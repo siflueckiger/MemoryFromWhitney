@@ -9,11 +9,12 @@ class Object3 {
 
 
   void init() {
+    println("init object 3");
   }
 
   void show() {
     background(0);
-    
+
     translate(width/2, height/2);
 
     strokeWeight(1);
@@ -30,8 +31,6 @@ class Object3 {
 
 
   float x1(float _t1, float _t2) {
-    println(sin(_t1) * 200 + 24);
-
     return pow(sin(_t1), 3) * 200 + pow(cos(_t2), 3) * 200 ;
   }
 

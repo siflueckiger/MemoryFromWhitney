@@ -36,7 +36,7 @@ class Object2 {
 
     frameRate(13);
     
-    println(xPos1, yPos1, dia1, xPos2, yPos2, dia2);
+    println("init object 2");    
   }
 
   void show() {

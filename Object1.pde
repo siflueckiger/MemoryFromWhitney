@@ -26,6 +26,9 @@ class Object1 {
     B = 90;
     ALPHA_ = 40;
     CLR = color(R, G, B, ALPHA_);
+    
+    println("init object 1");
+
   }
 
   void show() {

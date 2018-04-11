@@ -7,6 +7,7 @@ import themidibus.*;
 Object1 o1;
 Object2 o2;
 Object3 o3;
+Object4 o4;
 
 MidiBus myBus;
 
@@ -25,16 +26,19 @@ color CLR;
 
 void setup() {
   size(800, 800);
+  //fullScreen();
+
   background(0);
   smooth();
-  frameRate(20);
+  //frameRate(20);
   strokeCap(SQUARE);
 
   //create objects
   o1 = new Object1();
   o2 = new Object2();
   o3 = new Object3();
-  
+  o4 = new Object4();
+
   //start listening to midi controller
   //MidiBus.list();
   myBus = new MidiBus(this, 0, 1);
@@ -51,8 +55,10 @@ void draw() {
     o1.show();
   } else if (screenValue == 2) {
     o2.show();
-  }else if (screenValue == 3) {
+  } else if (screenValue == 3) {
     o3.show();
+  } else if (screenValue == 4) {
+    o4.show();
   }
 }
 
@@ -75,6 +81,11 @@ void keyPressed() {
 
     o3.init();
     background(0);
+  } else if (key == '4') {
+    screenValue = 4;
+
+    o4.init();
+    background(0);
   } else if (key == 'r') {
     screenValue = 1;
 
@@ -84,7 +95,9 @@ void keyPressed() {
     background(0);
     o1.init();
     o2.init();
-  } else if(keyCode == RETURN){
+    o3.init();
+    o4.init();
+  } else if (keyCode == RETURN) {
     background(0);
   }
 }
@@ -128,7 +141,7 @@ void controllerChange(int channel, int number, int value) {
       STROKE_WEIGHT = int(map(value, 0, 127, 0, 10));
       break;
     case 47:
-     o1.it1 = map(value, 0, 127, 0, 0.05);
+      o1.it1 = map(value, 0, 127, 0, 0.05);
       break;
     case 48:
       o1.it2 = map(value, 0, 127, 0, 0.05);
@@ -162,10 +175,23 @@ void controllerChange(int channel, int number, int value) {
       STROKE_WEIGHT = int(map(value, 0, 127, 1, 20));
       break;
     case 47:
-     o2.it1 = map(value, 0, 127, 0, 0.5);
+      o2.it1 = map(value, 0, 127, 0, 0.5);
       break;
     case 48:
       o2.it2 = map(value, 0, 127, 0, 0.5);
+      break;
+    }
+  } else if (screenValue == 4) {
+    //Object4
+    switch(number) {
+    case 41:
+      o4.A = int(map(value, 0, 127, 1, 100));
+      break;
+    case 42:
+      o4.B = int(map(value, 0, 127, 1, 100));
+      break;
+    case 43:
+      o4.C = int(map(value, 0, 127, 1, 100));
       break;
     }
   }
