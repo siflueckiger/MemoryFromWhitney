@@ -13,10 +13,8 @@ Object4 o4;
 MidiBus myBus;
 
 //**** OSC ****
-OscP5 osc;
-NetAddress oscIn;
-
-int portIn = 10400;
+OscP5[] osc = new OscP5[2];
+int[] portIn = {10400, 10100};
 
 //**** VARIABLES ****
 int NUM_LINES;
@@ -32,7 +30,7 @@ color BG_CLR;
 
 
 void setup() {
-  size(800, 800);
+  size(400, 400);
   //fullScreen();
 
 
@@ -64,13 +62,14 @@ void setup() {
   o1.init();
 
   //start oscP5, listening for incoming message at portIn
-  osc = new OscP5(this, portIn);
+  for(int i=0; i<osc.length; i++){
+    osc[i] = new OscP5(this, portIn[i]);
+  }
 }
 
 
 void draw() {
   CLR = color(H_, S_, B_, ALPHA_);
-
   //object handler (for display)
   if (screenValue == 1) {
     o1.show();
@@ -82,7 +81,6 @@ void draw() {
     o4.show();
   }
 }
-
 
 
 void keyPressed() {
@@ -125,7 +123,6 @@ void keyPressed() {
 
 
 //**** MIDI CONTROLLER ****
-
 void controllerChange(int channel, int number, int value) {
   //println(number);
 
@@ -221,13 +218,15 @@ void controllerChange(int channel, int number, int value) {
 //**** OSC receiver ****
 void oscEvent(OscMessage theOscMessage) {
 
-  //listen to specific osc message
+  //listen to osc message
   if (theOscMessage.addrPattern().equals("/CrappyBird")) {
 
     float vol = theOscMessage.get(0).floatValue();
     int score = theOscMessage.get(1).intValue();
     int highscore = theOscMessage.get(2).intValue();
     int gameStatus = theOscMessage.get(3).intValue();
+
+    //println("CrappyBird osc receiving: ", vol, score, highscore, gameStatus);
 
     //check game gameStatus
     switch(gameStatus){
@@ -248,6 +247,19 @@ void oscEvent(OscMessage theOscMessage) {
         //println("game over");
         break;
     }
+  }
+
+  //listen to  osc message
+  if (theOscMessage.addrPattern().equals("/CamA")) {
+
+    float x = theOscMessage.get(0).floatValue();
+    float y = theOscMessage.get(1).floatValue();
+    float r = theOscMessage.get(2).floatValue();
+
+    SCALE = int(x * (height - 100));
+
+
+    //println("CamA osc received ", x, y, r);
   }
 
 }
