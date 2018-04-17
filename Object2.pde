@@ -14,47 +14,47 @@ class Object2 {
   void init() {
     NUM_LINES = 100;
     SCALE = 2;
-    
-    R = 255;
-    G = 255;
-    B = 255;
-    ALPHA_ = 100;
-    CLR = color(R, G, B);//, ALPHA_);
-    
+
+    H_ = 0;
+    S_ = 0;
+    B_ = 100;
+    ALPHA_ = 60;
+    CLR = color(H_, S_, B_, ALPHA_);
+
     STROKE_WEIGHT = 2;
-    
+
     xPos1 = 0;
     yPos1 = 0;
     dia1 = 50;
 
     xPos2 = 0;
-    yPos2 = 0;    
+    yPos2 = 0;
     dia2 = 200;
-    
+
     it1 = 0.2;
     it2 = 0.05;
 
     frameRate(13);
-    
-    println("init object 2");    
+
+    println("init object 2");
   }
 
   void show() {
-    background(0);
+    background(BG_CLR);
 
     translate(width/2, height/2);
-    
+
     for (int i=0; i < NUM_LINES; i++) {
-     
+
      strokeWeight(STROKE_WEIGHT);
      stroke(CLR);
      line(xPos1 + x1(t1+i, dia1), yPos1 + y1(t1+i, dia1), xPos2 + x1(t2+i, dia2), yPos2 + y1(t2+i, dia2));
      }
-     
+
     t1 -= it1;
     t2 += it2;
 
-    fill(0, 255, 0);
+    fill(100, 100, 100);
     textSize(10);
     text("Double Circle - screenValue: " + screenValue, -width/2+20, -height/2+20);
   }

@@ -21,12 +21,12 @@ class Object1 {
     it1 = 0.01;
     it2 = 0.005;
 
-    R = 250;
-    G = 130;
-    B = 90;
+    H_ = 360;
+    S_ = 60;
+    B_ = 60;
     ALPHA_ = 40;
-    CLR = color(R, G, B, ALPHA_);
-    
+    CLR = color(H_, S_, B_, ALPHA_);
+
     println("init object 1");
 
   }
@@ -41,12 +41,12 @@ class Object1 {
       stroke(CLR);
       line(x1(t1 + i), y1(t1 + i), x1(t2 + i), y1(t2 + i));
     }
-    
+
     t1 += it1;
     t2 += it2;
 
 
-    fill(0, 255, 0);
+    fill(100, 100, 100);
     textSize(10);
     text("ASTEROID - screenValue: " + screenValue, -width/2+20, -height/2+20);
   }

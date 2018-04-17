@@ -21,19 +21,19 @@ class Object4 {
     translate(width/2, height/2);
 
     strokeWeight(2);
-    stroke(0, 255, 0);
+    stroke(120, 100, 100);
     //line(x1(t1), y1(t1), x1(t1+0.05), y1(t1+0.05));
-    fill(255,20);
+    fill(0, 0, 100, 20);
     beginShape();
     for(int i=0; i < 40; i++){
-      
-      vertex(x1(t1+i), y1(t1+i)); 
-      //println(x1(t1+i), y1(t1+i)); 
+
+      vertex(x1(t1+i), y1(t1+i));
+      //println(x1(t1+i), y1(t1+i));
     }
-    
+
     endShape();
-    
-    
+
+
     //for (int i=0; i < 20; i++) {
       //line(x1(t1+i), y1(t1+i), x1(t1+i+0.05), y1(t1+i+0.05));
      // line(x1(t1+i), y1(t1+i),x1(t1+i)+1, y1(t1+i)+1);

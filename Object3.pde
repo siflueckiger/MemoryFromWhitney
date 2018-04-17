@@ -18,7 +18,7 @@ class Object3 {
     translate(width/2, height/2);
 
     strokeWeight(1);
-    stroke(255, 0, 0);
+    stroke(100, 100, 100);
 
     for (int i=0; i < 50; i++) {
       line(x1(t1+i, t2+1), y1(t1+i, t2+i), x1(t2+i, t1+1), y1(t2+i, t1+1));

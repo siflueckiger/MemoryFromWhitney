@@ -26,18 +26,28 @@ int STROKE_WEIGHT;
 int screenValue;
 int objectValue;
 
-float R, G, B, ALPHA_;
+float H_, S_, B_, ALPHA_;
 color CLR;
+color BG_CLR;
 
 
 void setup() {
   size(800, 800);
   //fullScreen();
 
-  background(0);
-  smooth();
+
   //frameRate(20);
   strokeCap(SQUARE);
+  colorMode(HSB);
+  smooth();
+
+  BG_CLR = color(0, 0, 10);
+  background(BG_CLR);
+  H_ = 360;
+  S_ = 60;
+  B_ = 60;
+  ALPHA_ = 80;
+  CLR = color(H_, S_, B_, ALPHA_);
 
   //create objects
   o1 = new Object1();
@@ -79,35 +89,35 @@ void keyPressed() {
     screenValue = 1;
 
     o1.init();
-    background(0);
+    background(BG_CLR);
   } else if (key == '2') {
     screenValue = 2;
 
     o2.init();
-    background(0);
+    background(BG_CLR);
   } else if (key == '3') {
     screenValue = 3;
 
     o3.init();
-    background(0);
+    background(BG_CLR);
   } else if (key == '4') {
     screenValue = 4;
 
     o4.init();
-    background(0);
+    background(BG_CLR);
   } else if (key == 'r') {
     screenValue = 1;
 
     o1.init();
-    background(0);
+    background(BG_CLR);
   } else if (keyCode == BACKSPACE) {
-    background(0);
+    background(BG_CLR);
     o1.init();
     o2.init();
     o3.init();
     o4.init();
   } else if (keyCode == RETURN) {
-    background(0);
+    background(BG_CLR);
   }
 }
 
@@ -121,20 +131,20 @@ void controllerChange(int channel, int number, int value) {
   switch(number) {
     //color
   case 21:
-    R = map(value, 0, 127, 0, 255);
+    H_ = map(value, 0, 127, 0, 360);
     break;
   case 22:
-    G = map(value, 0, 127, 0, 255);
+    S_ = map(value, 0, 127, 0, 100);
     break;
   case 23:
-    B = map(value, 0, 127, 0, 255);
+    B_ = map(value, 0, 127, 0, 100);
     break;
   case 24:
     ALPHA_ = map(value, 0, 127, 1, 80);
     break;
   }
 
-  CLR = color(R, G, B, ALPHA_);
+  CLR = color(H_, S_, B_, ALPHA_);
 
   //for specific objects
   if (screenValue == 1) {
@@ -217,17 +227,18 @@ void oscEvent(OscMessage theOscMessage) {
     int highscore = theOscMessage.get(2).intValue();
     int gameStatus = theOscMessage.get(3).intValue();
 
-    NUM_LINES = int(vol * 100);
+
 
     switch(gameStatus){
       case 0:
-        println("initialize");
+        //println("initialize");
         break;
       case 1:
-        println("playing");
+        //println("playing");
+        NUM_LINES = int(vol * 500);
         break;
       case 2:
-        println("game over");
+        //println("game over");
         break;
     }
 
