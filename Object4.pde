@@ -28,7 +28,7 @@ class Object4 {
     for(int i=0; i < 40; i++){
       
       vertex(x1(t1+i), y1(t1+i)); 
-      println(x1(t1+i), y1(t1+i)); 
+      //println(x1(t1+i), y1(t1+i)); 
     }
     
     endShape();
@@ -42,8 +42,8 @@ class Object4 {
 
     //println("A: " + A + " B: " + B + " C: " + C);
 
-    t1 += 0.001;
-    t2 += 0.004;
+    t1 += 0.0001;
+    t2 += 0.0004;
   }
 
 
