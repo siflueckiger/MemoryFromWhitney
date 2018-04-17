@@ -13,8 +13,8 @@ Object4 o4;
 MidiBus myBus;
 
 //**** OSC ****
-OscP5[] osc = new OscP5[2];
-int[] portIn = {10400, 10100};
+OscP5[] osc = new OscP5[3];
+int[] portIn = {10400, 10100, 20100};
 
 //**** VARIABLES ****
 int NUM_LINES;
@@ -268,5 +268,14 @@ void oscEvent(OscMessage theOscMessage) {
 
     //println("CamA osc received ", x, y, r);
   }
+
+  //listen to  osc message
+  if (theOscMessage.addrPattern().equals("/TotalVolume")) {
+
+    float totVol = theOscMessage.get(0).floatValue();
+
+    println("TotalVolume osc received: ", totVol);
+  }
+
 
 }
