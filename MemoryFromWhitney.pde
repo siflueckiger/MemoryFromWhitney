@@ -236,6 +236,8 @@ void oscEvent(OscMessage theOscMessage) {
 
       case 1:
         //println("playing");
+
+        //object1
         o1.it1 = map(vol, 0, 1, 0.0001, 0.06);
         o1.it2 = map(vol, 0, 1, 0.001, 0.01);
 
@@ -256,8 +258,13 @@ void oscEvent(OscMessage theOscMessage) {
     float y = theOscMessage.get(1).floatValue();
     float r = theOscMessage.get(2).floatValue();
 
+    //general variables
     SCALE = int(x * (height - 100));
 
+    //object2
+    o2.xPos1 = map(x, 0, 1, - width/2, width/2);
+    o2.yPos1 = map(y, 0, 1, -height/2, height/2);
+    o2.dia1 = r * height/2;
 
     //println("CamA osc received ", x, y, r);
   }
