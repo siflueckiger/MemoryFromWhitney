@@ -1,9 +1,10 @@
 
-//---- LIBRARIES ----
+//**** LIBRARIES ****
 import themidibus.*;
+import oscP5.*;
+import netP5.*;
 
-
-//---- OBJECTS ----
+//**** OBJECTS ****
 Object1 o1;
 Object2 o2;
 Object3 o3;
@@ -11,8 +12,13 @@ Object4 o4;
 
 MidiBus myBus;
 
+//**** OSC ****
+OscP5 osc;
+NetAddress oscIn;
 
-//---- VARIABLES ----
+int portIn = 10420;
+
+//**** VARIABLES ****
 int NUM_LINES;
 int SCALE;
 int STROKE_WEIGHT;
@@ -46,6 +52,9 @@ void setup() {
   //start with specific object
   screenValue = 1;
   o1.init();
+  
+  //start oscP5, listening for incoming message at portIn
+  osc = new OscP5(this, portIn);
 }
 
 
@@ -103,7 +112,7 @@ void keyPressed() {
 }
 
 
-//---- MIDI CONTROLLER ----
+//**** MIDI CONTROLLER ****
 
 void controllerChange(int channel, int number, int value) {
   //println(number); 
@@ -194,5 +203,26 @@ void controllerChange(int channel, int number, int value) {
       o4.C = int(map(value, 0, 127, 1, 100));
       break;
     }
+  }
+}
+
+//**** OSC receiver ****
+void oscEvent(OscMessage theOscMessage) {
+
+  //listen to specific osc message
+  if (theOscMessage.addrPattern().equals("CrappyBird")) { 
+    
+    float vol = theOscMessage.get(0).floatValue();
+    int score = theOscMessage.get(1).intValue();
+    int highscore = theOscMessage.get(2).intValue();
+    
+   ALPHA_ = map(vol,0,1,10,80);
+   println(ALPHA_);
+   CLR = color(R, G, B, ALPHA_);
+   NUM_LINES = int(map(score, 0, highscore, 1, 500));
+   
+   o4.A = map(score, 0, 200, 0, 10);
+   o4.B = map(score, 0, 5000, 0, 8);
+   o4.C = map(score, 0, 1000, 0, 19);
   }
 }
