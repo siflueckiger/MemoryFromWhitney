@@ -69,6 +69,8 @@ void setup() {
 
 
 void draw() {
+  CLR = color(H_, S_, B_, ALPHA_);
+
   //object handler (for display)
   if (screenValue == 1) {
     o1.show();
@@ -227,20 +229,25 @@ void oscEvent(OscMessage theOscMessage) {
     int highscore = theOscMessage.get(2).intValue();
     int gameStatus = theOscMessage.get(3).intValue();
 
-
-
+    //check game gameStatus
     switch(gameStatus){
       case 0:
         //println("initialize");
         break;
+
       case 1:
         //println("playing");
-        NUM_LINES = int(vol * 500);
+        o1.it1 = map(vol, 0, 1, 0.0001, 0.06);
+        o1.it2 = map(vol, 0, 1, 0.001, 0.01);
+
         break;
+
       case 2:
+        o1.it1 = 0.0001;
+        o1.it2 = 0.01;
         //println("game over");
         break;
     }
-
   }
+
 }

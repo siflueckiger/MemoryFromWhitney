@@ -32,7 +32,7 @@ class Object1 {
   }
 
   void show() {
-    background(0);
+    background(BG_CLR);
     translate(width/2, height/2);
 
     for (int i=0; i < NUM_LINES; i++) {
