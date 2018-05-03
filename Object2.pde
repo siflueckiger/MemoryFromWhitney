@@ -12,14 +12,14 @@ class Object2 {
 
 
   void init() {
-    NUM_LINES = 100;
+    NUM_LINES =6;
     SCALE = 2;
 
-    H_ = 0;
-    S_ = 0;
-    B_ = 100;
-    ALPHA_ = 60;
-    CLR = color(H_, S_, B_, ALPHA_);
+    R_ = 0;
+    G_ = 255;
+    B_ = 0;
+    ALPHA_ = 127;
+    CLR = color(R_, G_, B_, ALPHA_);
 
     STROKE_WEIGHT = 2;
 
@@ -31,8 +31,8 @@ class Object2 {
     yPos2 = 0;
     dia2 = 200;
 
-    it1 = 0.2;
-    it2 = 0.05;
+    it1 = 0.001;
+    it2 = 0.01;
 
     frameRate(13);
 

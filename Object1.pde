@@ -1,5 +1,3 @@
-
-
 class Object1 {
 
   float t1, t2;
@@ -21,11 +19,11 @@ class Object1 {
     it1 = 0.01;
     it2 = 0.005;
 
-    H_ = 360;
-    S_ = 60;
-    B_ = 60;
-    ALPHA_ = 40;
-    CLR = color(H_, S_, B_, ALPHA_);
+    R_ = 255;
+    G_ = 0;
+    B_ = 0;
+    ALPHA_ = 127;
+    CLR = color(R_, G_, B_, ALPHA_);
 
     println("init object 1");
 

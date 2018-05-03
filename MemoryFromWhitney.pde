@@ -13,8 +13,8 @@ Object4 o4;
 MidiBus myBus;
 
 //**** OSC ****
-OscP5[] osc = new OscP5[3];
-int[] portIn = {10400, 10100, 20100};
+OscP5[] osc = new OscP5[4];
+int[] portIn = {10400, 10100, 20100, 30100};
 
 //**** VARIABLES ****
 int NUM_LINES;
@@ -24,28 +24,27 @@ int STROKE_WEIGHT;
 int screenValue;
 int objectValue;
 
-float H_, S_, B_, ALPHA_;
+float R_, G_, B_, ALPHA_;
 color CLR;
 color BG_CLR;
 
 
 void setup() {
-  size(400, 400);
-  //fullScreen();
+  //size(400, 400);
+  fullScreen(2);
 
 
   //frameRate(20);
   strokeCap(SQUARE);
-  colorMode(HSB);
   smooth();
 
   BG_CLR = color(0, 0, 10);
   background(BG_CLR);
-  H_ = 360;
-  S_ = 60;
+  R_ = 360;
+  G_ = 60;
   B_ = 60;
   ALPHA_ = 80;
-  CLR = color(H_, S_, B_, ALPHA_);
+  CLR = color(R_, G_, B_, ALPHA_);
 
   //create objects
   o1 = new Object1();
@@ -62,14 +61,14 @@ void setup() {
   o1.init();
 
   //start oscP5, listening for incoming message at portIn
-  for(int i=0; i<osc.length; i++){
+  for (int i=0; i<osc.length; i++) {
     osc[i] = new OscP5(this, portIn[i]);
   }
 }
 
 
 void draw() {
-  CLR = color(H_, S_, B_, ALPHA_);
+  CLR = color(R_, G_, B_, ALPHA_);
   //object handler (for display)
   if (screenValue == 1) {
     o1.show();
@@ -130,10 +129,10 @@ void controllerChange(int channel, int number, int value) {
   switch(number) {
     //color
   case 21:
-    H_ = map(value, 0, 127, 0, 360);
+    R_ = map(value, 0, 127, 0, 360);
     break;
   case 22:
-    S_ = map(value, 0, 127, 0, 100);
+    G_ = map(value, 0, 127, 0, 100);
     break;
   case 23:
     B_ = map(value, 0, 127, 0, 100);
@@ -143,7 +142,7 @@ void controllerChange(int channel, int number, int value) {
     break;
   }
 
-  CLR = color(H_, S_, B_, ALPHA_);
+  CLR = color(R_, G_, B_, ALPHA_);
 
   //for specific objects
   if (screenValue == 1) {
@@ -215,10 +214,10 @@ void controllerChange(int channel, int number, int value) {
   }
 }
 
+
 //**** OSC receiver ****
 void oscEvent(OscMessage theOscMessage) {
 
-  //listen to osc message
   if (theOscMessage.addrPattern().equals("/CrappyBird")) {
 
     float vol = theOscMessage.get(0).floatValue();
@@ -229,29 +228,49 @@ void oscEvent(OscMessage theOscMessage) {
     //println("CrappyBird osc receiving: ", vol, score, highscore, gameStatus);
 
     //check game gameStatus
-    switch(gameStatus){
-      case 0:
-        //println("initialize");
-        break;
+    switch(gameStatus) {
+    case 0:
+      //println("initialize");
+      break;
 
-      case 1:
-        //println("playing");
+    case 1:
+      //println("playing");
 
-        //object1
-        o1.it1 = map(vol, 0, 1, 0.0001, 0.06);
-        o1.it2 = map(vol, 0, 1, 0.001, 0.01);
+      //object1
+      o1.it1 = map(vol, 0, 1, 0.0001, 0.06);
+      o1.it2 = map(vol, 0, 1, 0.001, 0.01);
 
-        break;
+      //object2
+      o2.it1 = map(vol, 0, 1, 0.0001, 0.2);
+      o2.it2 = map(vol, 0, 1, 0.001, 0.05);
 
-      case 2:
-        o1.it1 = 0.0001;
-        o1.it2 = 0.01;
-        //println("game over");
-        break;
+      //object3
+      o3.it1 = map(vol, 0, 1, 0.0001, 0.2);
+      o3.it2 = map(vol, 0, 1, 0.001, 0.05);
+
+      //object4
+      o4.it1 = map(vol, 0, 1, 0.0001, 0.002);
+      o4.it2 = map(vol, 0, 1, 0.0005, 0.01);
+
+      break;
+
+    case 2:
+      //object1
+      o1.it1 = 0.0001;
+      o1.it2 = 0.01;
+
+      //object2
+      o2.it1 = 0.0001;
+      o2.it2 = 0.01;
+
+      //object3
+      o3.it1 = 0.0001;
+      o3.it2 = 0.01;
+      //println("game over");
+      break;
     }
   }
 
-  //listen to  osc message
   if (theOscMessage.addrPattern().equals("/CamA")) {
 
     float x = theOscMessage.get(0).floatValue();
@@ -263,13 +282,12 @@ void oscEvent(OscMessage theOscMessage) {
 
     //object2
     o2.xPos1 = map(x, 0, 1, - width/2, width/2);
-    o2.yPos1 = map(y, 0, 1, -height/2, height/2);
+    o2.yPos1 = map(y, 0, 1, - height/2, height/2);
     o2.dia1 = r * height/2;
 
     //println("CamA osc received ", x, y, r);
   }
 
-  //listen to  osc message
   if (theOscMessage.addrPattern().equals("/TotalVolume")) {
 
     float totVol = theOscMessage.get(0).floatValue();
@@ -277,5 +295,28 @@ void oscEvent(OscMessage theOscMessage) {
     println("TotalVolume osc received: ", totVol);
   }
 
+  if (theOscMessage.addrPattern().equals("/M2")) {
 
+    int note = theOscMessage.get(0).intValue();
+    int noteStatus = theOscMessage.get(1).intValue();
+
+    BG_CLR = color(note, 0, 0);
+    println("MIDI: ", note, noteStatus);
+  }
+
+  if (theOscMessage.addrPattern().equals("/M1")) {
+
+    int note = theOscMessage.get(0).intValue();
+    int noteStatus = theOscMessage.get(1).intValue();
+
+    BG_CLR = color(note, 0, 0);
+  }
+
+  if (theOscMessage.addrPattern().equals("/M2")) {
+
+    int note = theOscMessage.get(0).intValue();
+    int noteStatus = theOscMessage.get(1).intValue();
+
+    BG_CLR = color(0, 0, note);
+  }
 }

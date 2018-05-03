@@ -1,6 +1,6 @@
 class Object4 {
   float t1, t2;
-  float it1;
+  float it1, it2;
   float A, B, C;
 
 
@@ -13,10 +13,13 @@ class Object4 {
     A = 15;
     B = 9;
     C = 6;
+    
+    it1 = 0.0001;
+    it2 = 0.0004;
   }
 
   void show() {
-    background(0);
+    background(BG_CLR);
 
     translate(width/2, height/2);
 
@@ -42,8 +45,8 @@ class Object4 {
 
     //println("A: " + A + " B: " + B + " C: " + C);
 
-    t1 += 0.0001;
-    t2 += 0.0004;
+    t1 += it1;
+    t2 += it2;
   }
 
 

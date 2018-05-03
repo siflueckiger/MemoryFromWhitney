@@ -10,23 +10,28 @@ class Object3 {
 
   void init() {
     println("init object 3");
+    NUM_LINES = 13;
+    it1 = 0.001;
+    it2 = 0.01;
   }
 
   void show() {
-    background(0);
+    background(BG_CLR);
 
     translate(width/2, height/2);
 
     strokeWeight(1);
     stroke(100, 100, 100);
 
-    for (int i=0; i < 50; i++) {
+    println(NUM_LINES);
+
+    for (int i=0; i < NUM_LINES; i++) {
       line(x1(t1+i, t2+1), y1(t1+i, t2+i), x1(t2+i, t1+1), y1(t2+i, t1+1));
     }
 
 
-    t1 += 0.02;
-    t2 += 0.05;
+    t1 += it1;
+    t2 += it2;
   }
 
 
