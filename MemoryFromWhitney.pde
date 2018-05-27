@@ -13,8 +13,8 @@ Object4 o4;
 MidiBus myBus;
 
 //**** OSC ****
-OscP5[] osc = new OscP5[4];
-int[] portIn = {10400, 10100, 20100, 30100};
+OscP5[] osc = new OscP5[3];
+int[] portIn = {10402, 30100, 10102};
 
 //**** VARIABLES ****
 int NUM_LINES;
@@ -217,7 +217,6 @@ void controllerChange(int channel, int number, int value) {
 
 //**** OSC receiver ****
 void oscEvent(OscMessage theOscMessage) {
-
   if (theOscMessage.addrPattern().equals("/CrappyBird")) {
 
     float vol = theOscMessage.get(0).floatValue();
@@ -238,7 +237,7 @@ void oscEvent(OscMessage theOscMessage) {
 
       //object1
       o1.it1 = map(vol, 0, 1, 0.0001, 0.06);
-      o1.it2 = map(vol, 0, 1, 0.001, 0.01);
+      o1.it2 = map(vol, 0, 1, 0.001, 0.1);
 
       //object2
       o2.it1 = map(vol, 0, 1, 0.0001, 0.2);
@@ -272,7 +271,6 @@ void oscEvent(OscMessage theOscMessage) {
   }
 
   if (theOscMessage.addrPattern().equals("/CamA")) {
-
     float x = theOscMessage.get(0).floatValue();
     float y = theOscMessage.get(1).floatValue();
     float r = theOscMessage.get(2).floatValue();
@@ -292,24 +290,17 @@ void oscEvent(OscMessage theOscMessage) {
 
     float totVol = theOscMessage.get(0).floatValue();
 
-    println("TotalVolume osc received: ", totVol);
-  }
-
-  if (theOscMessage.addrPattern().equals("/M2")) {
-
-    int note = theOscMessage.get(0).intValue();
-    int noteStatus = theOscMessage.get(1).intValue();
-
-    BG_CLR = color(note, 0, 0);
-    println("MIDI: ", note, noteStatus);
+    //println("TotalVolume osc received: ", totVol);
   }
 
   if (theOscMessage.addrPattern().equals("/M1")) {
 
     int note = theOscMessage.get(0).intValue();
     int noteStatus = theOscMessage.get(1).intValue();
+    //println("MIDI: ", note, noteStatus);
 
     BG_CLR = color(note, 0, 0);
+    NUM_LINES = int(map(note, 0, 127, 10, 100));
   }
 
   if (theOscMessage.addrPattern().equals("/M2")) {
@@ -317,6 +308,20 @@ void oscEvent(OscMessage theOscMessage) {
     int note = theOscMessage.get(0).intValue();
     int noteStatus = theOscMessage.get(1).intValue();
 
-    BG_CLR = color(0, 0, note);
+    BG_CLR = color(0, note, 0);
+    NUM_LINES = int(map(note, 0, 127, 10, 100));
+    //println("MIDI: ", note, noteStatus);
+  }
+
+
+
+  if (theOscMessage.addrPattern().equals("/M3")) {
+
+    int note = theOscMessage.get(0).intValue();
+    int noteStatus = theOscMessage.get(1).intValue();
+    //println("MIDI: ", note, noteStatus);
+
+    BG_CLR = color(0, note, note);
+    NUM_LINES = int(map(note, 0, 127, 10, 100));
   }
 }
