@@ -35,7 +35,7 @@ float CrappyBird = 1;
 void setup() {
   fullScreen(3);
   //size(500, 500);
-  radius = 1500; //height*.9/2;
+  radius = height*.9/2;
   xcenter = width/2;
   ycenter = height/2;
   noStroke();

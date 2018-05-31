@@ -66,8 +66,12 @@ void draw() {
   float ftime = millis() * .001 * speed;
   float step = ftime * stepend; //stepstart + (ftime * (stepend - stepstart));
 
+  println(millis() * .001 * 0.1 * stepend);
+  println(millis() * .001 * 1 * stepend);
+
   for (int i=0; i < points.length; i++) {
-    float a = 2 * PI * step * i;
+    float a = 2 * PI * step
+    * i;
 
     float radiusi = radius; 
     float x = xcenter + cos(a) * CrappyBird * (i/(float)npoints) * radiusi; //after cos(a) * 10 isch räch geil oder so ähnlech muess nid 10 si
