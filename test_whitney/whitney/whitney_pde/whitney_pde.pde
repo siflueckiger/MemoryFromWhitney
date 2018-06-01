@@ -34,8 +34,8 @@ float CrappyBird = 1;
 PVector points[] = new PVector[npoints];
 
 void setup() {
-  //fullScreen();
-  size(800, 800);
+  fullScreen(3);
+  //size(800, 800);
   background(BG_COLOR);
 
   radius = height*.9/2;
@@ -70,8 +70,7 @@ void draw() {
   println(millis() * .001 * 1 * stepend);
 
   for (int i=0; i < points.length; i++) {
-    float a = 2 * PI * step
-    * i;
+    float a = 2 * PI * step * i;
 
     float radiusi = radius; 
     float x = xcenter + cos(a) * CrappyBird * (i/(float)npoints) * radiusi; //after cos(a) * 10 isch räch geil oder so ähnlech muess nid 10 si
@@ -82,10 +81,10 @@ void draw() {
 
   for (int i=0; i < points.length-2; i++) {
     fill(255);
-    ellipse(points[i].x, points[i].y, 2, 2);
-    stroke(0, 200, 110, 75);
-    //line(points[i].x, points[i].y, points[i+1].x, points[i+1].y) ;//width/2,height/2);//points[i+1].x, points[i+1].y);
-    noStroke();
+    //ellipse(points[i].x, points[i].y, 2, 2);
+    stroke(0, 200, 110);
+    line(points[i].x, points[i].y, points[i+1].x, points[i+1].y) ;//width/2,height/2);//points[i+1].x, points[i+1].y);
+    //noStroke();
     //fill(100*sin(i), 255*tan(i), 250*sin(i), 25);
     fill(0, 255, 0, 5);
     //triangle(points[i].x, points[i].y, points[i+1].x, points[i+1].y, width/2, height/2);//points[i+2].x, points[i+2].y);

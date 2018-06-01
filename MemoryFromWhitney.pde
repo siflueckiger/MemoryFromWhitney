@@ -82,7 +82,7 @@ void draw() {
 }
 
 
-void keyPressed() {
+void keyReleased() {
   //object handler (user input)
   if (key == '1') {
     screenValue = 1;
