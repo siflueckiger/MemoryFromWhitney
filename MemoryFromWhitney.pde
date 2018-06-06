@@ -14,7 +14,11 @@ MidiBus myBus;
 
 //**** OSC ****
 OscP5[] osc = new OscP5[5];
-int[] portIn = {10101, 40101, 20101, 21101, 30101};
+int[] portIn = {10101, // counter
+  40101, // sound M1-M3
+  20101, // game youFou
+  21101, // game crappyBird
+  30101}; // cam Pendel
 
 //**** VARIABLES ****
 int NUM_LINES;
@@ -217,6 +221,8 @@ void controllerChange(int channel, int number, int value) {
 
 //**** OSC receiver ****
 void oscEvent(OscMessage theOscMessage) {
+
+  //**** CRAPPYBIRD ****
   if (theOscMessage.addrPattern().equals("/CrappyBird")) {
 
     float vol = theOscMessage.get(0).floatValue();
@@ -270,6 +276,19 @@ void oscEvent(OscMessage theOscMessage) {
     }
   }
 
+  //**** YOUFOU ****
+  if (theOscMessage.addrPattern().equals("/YouFou")) {
+
+    float x = theOscMessage.get(0).floatValue();
+    float y = theOscMessage.get(1).floatValue();
+    
+    o1.t1 = x;
+    o1.t2 = y;
+    
+    //println("YouFou osc received: ", x, y);
+  }
+
+  //**** CAM PENDEL ****
   if (theOscMessage.addrPattern().equals("/CamA")) {
     float x = theOscMessage.get(0).floatValue();
     float y = theOscMessage.get(1).floatValue();
@@ -286,6 +305,8 @@ void oscEvent(OscMessage theOscMessage) {
     //println("CamA osc received ", x, y, r);
   }
 
+
+  //**** COUNTER ****
   if (theOscMessage.addrPattern().equals("/TotalVolume")) {
 
     float totVol = theOscMessage.get(0).floatValue();
@@ -293,6 +314,8 @@ void oscEvent(OscMessage theOscMessage) {
     //println("TotalVolume osc received: ", totVol);
   }
 
+
+  //**** SOUND MODUL 1-3 ****
   if (theOscMessage.addrPattern().equals("/M1")) {
 
     int note = theOscMessage.get(0).intValue();
@@ -312,8 +335,6 @@ void oscEvent(OscMessage theOscMessage) {
     NUM_LINES = int(map(note, 0, 127, 10, 100));
     //println("MIDI: ", note, noteStatus);
   }
-
-
 
   if (theOscMessage.addrPattern().equals("/M3")) {
 
