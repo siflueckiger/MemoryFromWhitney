@@ -13,8 +13,8 @@ Object4 o4;
 MidiBus myBus;
 
 //**** OSC ****
-OscP5[] osc = new OscP5[3];
-int[] portIn = {10402, 30100, 10102};
+OscP5[] osc = new OscP5[5];
+int[] portIn = {10101, 40101, 20101, 21101, 30101};
 
 //**** VARIABLES ****
 int NUM_LINES;

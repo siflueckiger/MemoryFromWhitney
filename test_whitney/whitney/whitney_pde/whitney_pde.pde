@@ -9,7 +9,7 @@ import netP5.*;
 
 //**** OSC ****
 OscP5[] osc = new OscP5[3];
-int[] portIn = {10401, 30101, 10101};
+int[] portIn = {10102, 40102, 20102, 21202, 30102};
 
 
 //**** VARIABLES ****
