@@ -260,17 +260,6 @@ void oscEvent(OscMessage theOscMessage) {
       break;
 
     case 2:
-      //object1
-      o1.it1 = 0.0001;
-      o1.it2 = 0.01;
-
-      //object2
-      o2.it1 = 0.0001;
-      o2.it2 = 0.01;
-
-      //object3
-      o3.it1 = 0.0001;
-      o3.it2 = 0.01;
       //println("game over");
       break;
     }
@@ -281,9 +270,23 @@ void oscEvent(OscMessage theOscMessage) {
 
     float x = theOscMessage.get(0).floatValue();
     float y = theOscMessage.get(1).floatValue();
+    int gameStatus = theOscMessage.get(2).intValue();
     
-    o1.t1 = x;
-    o1.t2 = y;
+    switch(gameStatus) {
+    case 0:
+      println(0, gameStatus);
+      break;
+    
+    case 1:
+      println(1, gameStatus);
+      o1.t1 = x;
+      o1.t2 = y;
+      break;
+      
+    case 2:
+      println(2, gameStatus);
+      break;
+    }
     
     //println("YouFou osc received: ", x, y);
   }

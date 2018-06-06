@@ -147,10 +147,23 @@ void oscEvent(OscMessage theOscMessage) {
 
     float x = theOscMessage.get(0).floatValue();
     float y = theOscMessage.get(1).floatValue();
+    int gameStatus = theOscMessage.get(2).intValue();
     
-    youFouX = x;
-    youFouY = y;
-    //println("YouFou osc received: ", x, y);
+    switch(gameStatus) {
+    case 0:
+      println(0, gameStatus);
+      break;
+    
+    case 1:
+      println(1, gameStatus);
+      youFouX = x;
+      youFouY = y;
+      break;
+      
+    case 2:
+      println(2, gameStatus);
+      break;
+    }
   }
   
   //**** COUNTER ****
