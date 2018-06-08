@@ -43,8 +43,13 @@ class Object2 {
     for (int i=0; i < NUM_LINES; i++) {
 
       strokeWeight(STROKE_WEIGHT);
-      stroke(CLR);
-      line(xPos1 + x1(t1+i, dia1), yPos1 + y1(t1+i, dia1), xPos2 + x1(t2+i, dia2), yPos2 + y1(t2+i, dia2));
+      //stroke(CLR);
+      //line(xPos1 + x1(t1+i, dia1), yPos1 + y1(t1+i, dia1), xPos2 + x1(t2+i, dia2), yPos2 + y1(t2+i, dia2));
+      noStroke();
+      fill(R_, G_, B_, 25);
+      triangle(xPos1, yPos1, xPos1 + x1(t1+i, dia1), yPos1 + y1(t1+i, dia1), xPos2 + x1(t2+i, dia2), yPos2 + y1(t2+i, dia2));
+      fill(B_, R_, G_, 25);
+      triangle(xPos2, yPos2, xPos1 + x1(t1+i, dia1), yPos1 + y1(t1+i, dia1), xPos2 + x1(t2+i, dia2), yPos2 + y1(t2+i, dia2));
     }
 
     t1 -= it1;

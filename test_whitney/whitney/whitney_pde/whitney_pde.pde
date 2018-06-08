@@ -8,12 +8,11 @@ import netP5.*;
 
 
 //**** OSC ****
-OscP5[] osc = new OscP5[5];
-int[] portIn = {10102,  // counter
-                40102,  // sound M 1-3
-                20102,  // game youFou
-                21102,  // game CrappyBird
-                30102}; // cam Pendel
+OscP5[] osc = new OscP5[4];
+int[] portIn = {40102, // sound M 1-3
+  20102, // game youFou
+  21102, // game CrappyBird
+  30102}; // cam Pendel
 
 
 //**** VARIABLES ****
@@ -22,7 +21,7 @@ float stepend = 1/60.0;
 float xleft = 38;
 float ybottom = 18;
 float iStep;
-
+float mspeed;
 float radius;
 float xcenter = 140;
 float ycenter = 96;
@@ -31,11 +30,12 @@ float speed = 0.05;
 int npoints = 360;
 int ilength = 170;
 
-<<<<<<< HEAD
-int r = 0, g = 255, b = 130, alpha = 100;
-=======
-int alpha = 255;
->>>>>>> b7b97bc8fe153f5174e8ff2bf4d0057327dc9918
+int tempScore;
+
+float diameter = 4;
+
+int r = 0, g = 255, b = 130;
+int alpha = 125;
 color BG_CLR = 0;
 
 float CrappyBird = 1;
@@ -49,6 +49,8 @@ PVector points[] = new PVector[npoints];
 void setup() {
   fullScreen(3);
   //size(800, 800);
+  noCursor();
+
   background(BG_CLR);
 
   radius = height*.9/2;
@@ -69,47 +71,36 @@ void setup() {
 }
 
 void draw() {
-<<<<<<< HEAD
   background(BG_CLR); // erase
 
-  speed = map(mouseX, 0, width, 0.01, 0.2);
-  radius = int(map(mouseY, 0, height, 50, 2000));
-  //npoints = int(map(mouseX, 0, width, 3, 4000));
-  //println(npoints, radius);
-
-  float ftime = millis() * .001 * speed;
-  float step = ftime * stepend + iStep; //stepstart + (ftime * (stepend - stepstart));
-=======
+  float ftime = millis() * 0.0001 * speed;
+  float step = ftime * stepstart + (ftime * (stepend - stepstart)); //stepend + iStep;
   background(BG_CLR);
-
-  float ftime = millis() * .001 * speed;
-  float step = ftime * stepend * CrappyBird; //stepstart + (ftime * (stepend - stepstart));
-
->>>>>>> b7b97bc8fe153f5174e8ff2bf4d0057327dc9918
 
   for (int i=0; i < points.length; i++) {
     float a = 2 * PI * step * i;
 
     float radiusi = radius; 
-    float x = xcenter + cos(a) * youFouX * (i/(float)npoints) * radiusi; //after cos(a) * 10 isch räch geil oder so ähnlech muess nid 10 si
-    float y = ycenter + sin(a) * youFouY * (i/(float)npoints) * radiusi;
+    float x = xcenter + cos(a) * (i/(float)npoints) * radiusi; //  * youFouX; //after cos(a) * 10 isch räch geil oder so ähnlech muess nid 10 si
+    float y = ycenter + sin(a) * (i/(float)npoints) * radiusi; // * youFouY;
 
     points[i].set(x, height-y);
   }
 
   for (int i=0; i < points.length-2; i++) {
-<<<<<<< HEAD
     switch(drawStyle) {
     case 0:
       //points
-      fill(r, g, b);
+      fill(r, g, b, 255);//alpha);
       noStroke();
-      ellipse(points[i].x, points[i].y, 2, 2);
+      ellipse(points[i].x, points[i].y, diameter, diameter);
       break;
 
     case 1:
       //lines
-      stroke(r, g, b, 50);
+      int alpha1_ = int(map(alpha, 125, 5, 40, 100));
+      strokeWeight(3);
+      stroke(r, g, b, 100);// alpha1_);
       line(points[i].x, points[i].y, points[i+1].x, points[i+1].y);
       break;
 
@@ -120,24 +111,12 @@ void draw() {
       triangle(points[i].x, points[i].y, points[i+1].x, points[i+1].y, points[i+2].x, points[i+2].y);//points[i+2].x, points[i+2].y);
       break;
     }
-=======
-    //println(alpha);
-    fill(255, alpha);
-    //ellipse(points[i].x, points[i].y, 2, 2);
-    stroke(0, 200, 110, alpha);
-    line(points[i].x, points[i].y, points[i+1].x, points[i+1].y) ;//width/2,height/2);//points[i+1].x, points[i+1].y);
-    //noStroke();
-    //fill(100*sin(i), 255*tan(i), 250*sin(i), 25);
-    fill(0, 255, 0, alpha);
-    //triangle(points[i].x, points[i].y, points[i+1].x, points[i+1].y, width/2, height/2);//points[i+2].x, points[i+2].y);
->>>>>>> b7b97bc8fe153f5174e8ff2bf4d0057327dc9918
   }
 }
 
 void keyReleased() {
   if (keyCode == UP) {
     drawStyle = int(random(0, 3));
-    println(drawStyle);
   }
 }
 
@@ -151,108 +130,93 @@ void oscEvent(OscMessage theOscMessage) {
     int highscore = theOscMessage.get(2).intValue();
     int gameStatus = theOscMessage.get(3).intValue();
 
-    //println("CrappyBird osc receiving: ", vol, score, highscore, gameStatus);
 
     //check game gameStatus
     switch(gameStatus) {
     case 0:
-      //println("initialize");
+      alpha = 255;
       break;
 
     case 1:
-      //println("playing");
-      //println(vol);
+
       CrappyBird = int(map(vol, 0, 1, 1, 5));
-      iStep += score / 100;
+      diameter = map(vol, 0, 1, 1, 100);
+      alpha = int(map(vol, 0, 1, 125, 5));
+
       break;
 
     case 2:
-      //println("game over");
+      diameter = 4;
+      alpha = 5;
       break;
     }
   }
 
-<<<<<<< HEAD
   if (theOscMessage.addrPattern().equals("/YouFou")) {
     float x = theOscMessage.get(0).floatValue();
     float y = theOscMessage.get(1).floatValue();
     int shotFired = theOscMessage.get(2).intValue();
     int gameScreen = theOscMessage.get(3).intValue();
+    int score = theOscMessage.get(4).intValue();
 
     switch(gameScreen) {
     case 0:
-      //println("initialize");
 
       break;
 
     case 1:
-      //println("playing");
 
-      if (shotFired == 1) {
-        drawStyle = int(random(0, 3));
+      if (score != tempScore) {
+        if (drawStyle <= 1) {
+          drawStyle++;
+          tempScore = score;
+        } else {
+          drawStyle=0;
+          tempScore = score;
+        }
       }
+
+      youFouX = map(x, 0, 1, -1, 1);
+      youFouY = map(y, 0, 1, -1, 1);
+      //youFouX = x * width;
+      //youFouY = y * height;
       break;
 
     case 2:
+      //youFouX = width/2;
+      //youFouY = height/2;
+      break;
 
+    case 3:
+      //youFouX = width/2;
+      //youFouY = height/2;
+      break;
+
+    case 4:
+      //youFouX = width/2;
+      //youFouY = height/2;
       break;
     }
-
-    //println("CamA osc received ", x, y, r);
   }
 
 
-=======
   //**** CAM PENDEL ****
->>>>>>> b7b97bc8fe153f5174e8ff2bf4d0057327dc9918
   if (theOscMessage.addrPattern().equals("/CamA")) {
     float x = theOscMessage.get(0).floatValue();
     float y = theOscMessage.get(1).floatValue();
-    float r = theOscMessage.get(2).floatValue();
+    float radius = theOscMessage.get(2).floatValue();
 
-    //radius = map(r, 0, 1, 200, 300);
-    xcenter = map(x, 0, 1, 0, width);
-    ycenter = map(y, 0, 1, 0, height);
 
     r = int(map(x, 0, 1, 0, 255));
     g = int(map(y, 0, 1, 0, 255));
     b = int(map(x+y, 0, 2, 0, 255));
-    
-    //println("CamA osc received ", x, y, r);
   }
-  
-  //**** YOUFOU ****
-  if (theOscMessage.addrPattern().equals("/YouFou")) {
-
-    float x = theOscMessage.get(0).floatValue();
-    float y = theOscMessage.get(1).floatValue();
-    int gameStatus = theOscMessage.get(2).intValue();
-    
-    switch(gameStatus) {
-    case 0:
-      println(0, gameStatus);
-      break;
-    
-    case 1:
-      println(1, gameStatus);
-      youFouX = x;
-      youFouY = y;
-      break;
-      
-    case 2:
-      println(2, gameStatus);
-      break;
-    }
-  }
-  
   //**** COUNTER ****
-  if (theOscMessage.addrPattern().equals("/TotalVolume")) {
+  if (theOscMessage.addrPattern().equals("/Master")) { //wert zwischen -1 und 1
+    float master = theOscMessage.get(0).floatValue();
 
-    float totVol = theOscMessage.get(0).floatValue();
-
-    //println("TotalVolume osc received: ", totVol);
+    mspeed += master;
   }
-
   //**** SOUND MODUL 1-3 ****
   if (theOscMessage.addrPattern().equals("/M1")) {
     //println(theOscMessage);
@@ -261,14 +225,6 @@ void oscEvent(OscMessage theOscMessage) {
 
     speed = map(note, 0, 127, 0.01, 0.6);
     BG_CLR = color(note, 0, 0);
-
-<<<<<<< HEAD
-    //BG_CLR = int(map(noteStatus, 0, 1, 0, 255));
-    //println("M1 osc received: ", note, noteStatus);
-=======
-    //BG_COLOR = int(map(noteStatus, 0, 1, 0, 255));
-    //println("M1 osc received: ", speed);
->>>>>>> b7b97bc8fe153f5174e8ff2bf4d0057327dc9918
   }
 
   if (theOscMessage.addrPattern().equals("/M2")) {
@@ -277,13 +233,6 @@ void oscEvent(OscMessage theOscMessage) {
 
     speed = map(note, 0, 127, 0.001, 0.06);
     BG_CLR = color(0, note, 0);
-<<<<<<< HEAD
-
-=======
->>>>>>> b7b97bc8fe153f5174e8ff2bf4d0057327dc9918
-
-
-    //println("M2 osc received: ", speed);
   }
 
   if (theOscMessage.addrPattern().equals("/M3")) {
@@ -292,11 +241,5 @@ void oscEvent(OscMessage theOscMessage) {
 
     speed = map(note, 0, 127, 0.1, 0.6);
     BG_CLR = color(0, note, note);
-<<<<<<< HEAD
-=======
-
->>>>>>> b7b97bc8fe153f5174e8ff2bf4d0057327dc9918
-
-    //println("M osc received: ", speed);
   }
 }

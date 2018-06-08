@@ -1,3 +1,5 @@
+//o1-4.t1???
+
 
 //**** LIBRARIES ****
 import oscP5.*;
@@ -11,9 +13,8 @@ Object4 o4;
 
 
 //**** OSC ****
-OscP5[] osc = new OscP5[5];
-int[] portIn = {10101, // counter
-  40101, // sound M1-M3
+OscP5[] osc = new OscP5[4];
+int[] portIn = {40101, // sound M1-M3
   20101, // game youFou
   21101, // game crappyBird
   30101}; // cam Pendel
@@ -26,6 +27,8 @@ int STROKE_WEIGHT;
 int screenValue;
 int objectValue;
 
+int tempScore;
+
 float R_, G_, B_, ALPHA_;
 color CLR;
 color BG_CLR;
@@ -34,7 +37,7 @@ color BG_CLR;
 void setup() {
   //size(400, 400);
   fullScreen(2);
-
+  noCursor();
 
   //frameRate(20);
   strokeCap(SQUARE);
@@ -143,23 +146,19 @@ void oscEvent(OscMessage theOscMessage) {
       //object1
       o1.it1 = map(vol, 0, 1, 0.0001, 0.06);
       o1.it2 = map(vol, 0, 1, 0.001, 0.1);
-      o1.t1 += score/100;
 
       //object2
       o2.it1 = map(vol, 0, 1, 0.0001, 0.2);
       o2.it2 = map(vol, 0, 1, 0.001, 0.05);
-      o2.t1 += score/100;
-      o2.dia2 = highscore / 10;
+      o2.dia2 = score;
 
       //object3
       o3.it1 = map(vol, 0, 1, 0.0001, 0.2);
       o3.it2 = map(vol, 0, 1, 0.001, 0.05);
-      o3.t1 += score/100;
 
       //object4
       o4.it1 = map(vol, 0, 1, 0.0001, 0.002);
       o4.it2 = map(vol, 0, 1, 0.0005, 0.01);
-      o4.t1 += score/100;
       break;
 
     case 2:
@@ -173,6 +172,8 @@ void oscEvent(OscMessage theOscMessage) {
     float y = theOscMessage.get(1).floatValue();
     int shotFired = theOscMessage.get(2).intValue();
     int gameScreen = theOscMessage.get(3).intValue();
+    int score = theOscMessage.get(4).intValue();
+
 
     switch(gameScreen) {
     case 0:
@@ -182,11 +183,17 @@ void oscEvent(OscMessage theOscMessage) {
 
     case 1:
       //println("playing");
-      o2.xPos2 = x * width;
-      o2.yPos2 = y * height;
+      o2.xPos2 = map(x, 0, 1, -width/2, width/2);
+      o2.yPos2 = map(y, 0, 1, -height/2, height/2);
 
-      if (shotFired == 1) {
-        screenValue = int(random(1, 4));
+      if (score != tempScore) {
+        if (screenValue <= 3) {
+          screenValue++;
+          tempScore = score;
+        } else {
+          screenValue=1;
+          tempScore = score;
+        }
       }
       break;
 
@@ -195,43 +202,42 @@ void oscEvent(OscMessage theOscMessage) {
       break;
     }
     //println("YouFou osc received: ", x, y);
-
-}
+  }
 
   //**** CAM PENDEL ****
   if (theOscMessage.addrPattern().equals("/CamA")) {
     float x = theOscMessage.get(0).floatValue();
     float y = theOscMessage.get(1).floatValue();
-    float r = theOscMessage.get(2).floatValue();
+    float radius = theOscMessage.get(2).floatValue();
 
     //general variables
-    SCALE = int(r * (height - 100));
+    SCALE = int(map(x, 0, 1, 100, height - 100));
     R_ = int(map(x, 0, 1, 0, 255));
     G_ = int(map(y, 0, 1, 0, 255));
     B_ = int(map(x+y, 0, 2, 0, 255));
 
-    //object1
-    STROKE_WEIGHT = int(map(r, 0, 1, 1, 10));
 
     //object2
     o2.xPos1 = map(x, 0, 1, - width/2, width/2);
     o2.yPos1 = map(y, 0, 1, - height/2, height/2);
-    o2.dia1 = r * height/2;
 
     //println("CamA osc received ", x, y, r);
   }
 
 
   //**** COUNTER ****
-  if (theOscMessage.addrPattern().equals("/TotalVolume")) {
-
-    float totVol = theOscMessage.get(0).floatValue();
-    o1.t2 += totVol / 100;
-    o2.t2 += totVol / 100;
-    o3.t2 += totVol / 100;
-    o4.t2 += totVol / 100;
-
-    //println("TotalVolume osc received: ", totVol);
+  if (theOscMessage.addrPattern().equals("/Master")) { //wert zwischen -1 und 1
+    float master = theOscMessage.get(0).floatValue();
+    //println("TotalVolume osc received: ", master);
+    
+    STROKE_WEIGHT = int(map(master, -1, 1, 1, 5));
+    
+    o1.t1 *= master;
+    o2.t1 *= master;
+    o3.t1 *= master;
+    o4.t1 *= master;
+    
+    o2.dia1 = map(master, -1, 1, 50, 300);
   }
 
   //**** SOUND MODUL 1-3 ****
@@ -240,13 +246,13 @@ void oscEvent(OscMessage theOscMessage) {
     int note = theOscMessage.get(0).intValue();
     int noteStatus = theOscMessage.get(1).intValue();
     //println("MIDI: ", note, noteStatus);
-    
-    if(noteStatus > 0){
+
+    if (noteStatus > 0) {
       o4.A = random(10, 329);
       o4.B = random(2, 4312);
       o4.C = random(54, 8745);
     }
-    
+
     BG_CLR = color(note, 0, 0);
     NUM_LINES = int(map(note, 0, 127, 10, 100));
   }
@@ -255,8 +261,8 @@ void oscEvent(OscMessage theOscMessage) {
 
     int note = theOscMessage.get(0).intValue();
     int noteStatus = theOscMessage.get(1).intValue();
-    
-    if(noteStatus > 0){
+
+    if (noteStatus > 0) {
       o4.A = random(10, 329);
       o4.B = random(2, 4312);
       o4.C = random(54, 8745);
@@ -272,13 +278,13 @@ void oscEvent(OscMessage theOscMessage) {
     int note = theOscMessage.get(0).intValue();
     int noteStatus = theOscMessage.get(1).intValue();
     //println("MIDI: ", note, noteStatus);
-    
-    if(noteStatus > 0){
+
+    if (noteStatus > 0) {
       o4.A = random(10, 329);
       o4.B = random(2, 4312);
       o4.C = random(54, 8745);
     }
-    
+
     BG_CLR = color(0, note, note);
     NUM_LINES = int(map(note, 0, 127, 10, 100));
   }

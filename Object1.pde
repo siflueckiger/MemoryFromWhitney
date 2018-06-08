@@ -30,16 +30,13 @@ class Object1 {
     background(BG_CLR);
     translate(width/2, height/2);
     
-    it1 = map(mouseX,0,width,0.01,5);
+    //it1 = map(mouseX,0,width,0.01,5);
 
     for (int i=0; i < NUM_LINES; i++) {
 
       strokeWeight(STROKE_WEIGHT);
-      stroke(CLR);
-      //line(x1(t1 + i), y1(t1 + i), x1(t2 + i), y1(t2 + i));
-      fill(0,255,0,5);
-      noStroke();
-      triangle(0,0,x1(t1 + i), y1(t1 + i), x1(t2 + i), y1(t2 + i));
+      stroke(R_, G_, B_);
+      line(x1(t1 + i), y1(t1 + i), x1(t2 + i), y1(t2 + i));
     }
 
     t1 += it1;
