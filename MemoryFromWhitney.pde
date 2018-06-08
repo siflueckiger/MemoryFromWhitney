@@ -55,9 +55,6 @@ void setup() {
   o3 = new Object3();
   o4 = new Object4();
 
-  //start listening to midi controller
-  //MidiBus.list();
-
   //start with specific object
   screenValue = 1;
   o1.init();
@@ -159,7 +156,6 @@ void oscEvent(OscMessage theOscMessage) {
       o3.it2 = map(vol, 0, 1, 0.001, 0.05);
       o3.t1 += score/100;
 
-
       //object4
       o4.it1 = map(vol, 0, 1, 0.0001, 0.002);
       o4.it2 = map(vol, 0, 1, 0.0005, 0.01);
@@ -167,28 +163,11 @@ void oscEvent(OscMessage theOscMessage) {
       break;
 
     case 2:
-<<<<<<< HEAD
-      /*
-      //object1
-       o1.it1 = 0.0001;
-       o1.it2 = 0.01;
-       
-       //object2
-       o2.it1 = 0.0001;
-       o2.it2 = 0.01;
-       
-       //object3
-       o3.it1 = 0.0001;
-       o3.it2 = 0.01;
-       */
-=======
->>>>>>> b7b97bc8fe153f5174e8ff2bf4d0057327dc9918
       //println("game over");
       break;
     }
   }
 
-<<<<<<< HEAD
   if (theOscMessage.addrPattern().equals("/YouFou")) {
     float x = theOscMessage.get(0).floatValue();
     float y = theOscMessage.get(1).floatValue();
@@ -215,35 +194,9 @@ void oscEvent(OscMessage theOscMessage) {
 
       break;
     }
-
-    //println("CamA osc received ", x, y, r);
-=======
-  //**** YOUFOU ****
-  if (theOscMessage.addrPattern().equals("/YouFou")) {
-
-    float x = theOscMessage.get(0).floatValue();
-    float y = theOscMessage.get(1).floatValue();
-    int gameStatus = theOscMessage.get(2).intValue();
-    
-    switch(gameStatus) {
-    case 0:
-      println(0, gameStatus);
-      break;
-    
-    case 1:
-      println(1, gameStatus);
-      o1.t1 = x;
-      o1.t2 = y;
-      break;
-      
-    case 2:
-      println(2, gameStatus);
-      break;
-    }
-    
     //println("YouFou osc received: ", x, y);
->>>>>>> b7b97bc8fe153f5174e8ff2bf4d0057327dc9918
-  }
+
+}
 
   //**** CAM PENDEL ****
   if (theOscMessage.addrPattern().equals("/CamA")) {
@@ -280,7 +233,6 @@ void oscEvent(OscMessage theOscMessage) {
 
     //println("TotalVolume osc received: ", totVol);
   }
-
 
   //**** SOUND MODUL 1-3 ****
   if (theOscMessage.addrPattern().equals("/M1")) {
