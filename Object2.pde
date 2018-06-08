@@ -12,12 +12,8 @@ class Object2 {
 
 
   void init() {
-    NUM_LINES =6;
     SCALE = 2;
 
-    R_ = 0;
-    G_ = 255;
-    B_ = 0;
     ALPHA_ = 127;
     CLR = color(R_, G_, B_, ALPHA_);
 
@@ -46,10 +42,10 @@ class Object2 {
 
     for (int i=0; i < NUM_LINES; i++) {
 
-     strokeWeight(STROKE_WEIGHT);
-     stroke(CLR);
-     line(xPos1 + x1(t1+i, dia1), yPos1 + y1(t1+i, dia1), xPos2 + x1(t2+i, dia2), yPos2 + y1(t2+i, dia2));
-     }
+      strokeWeight(STROKE_WEIGHT);
+      stroke(CLR);
+      line(xPos1 + x1(t1+i, dia1), yPos1 + y1(t1+i, dia1), xPos2 + x1(t2+i, dia2), yPos2 + y1(t2+i, dia2));
+    }
 
     t1 -= it1;
     t2 += it2;

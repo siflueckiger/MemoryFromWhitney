@@ -14,8 +14,8 @@ class Object4 {
     B = 9;
     C = 6;
     
-    it1 = 0.0001;
-    it2 = 0.0004;
+    it1 = 0.001;
+    it2 = 0.04;
   }
 
   void show() {
@@ -23,27 +23,17 @@ class Object4 {
 
     translate(width/2, height/2);
 
-    strokeWeight(2);
-    stroke(120, 100, 100);
-    //line(x1(t1), y1(t1), x1(t1+0.05), y1(t1+0.05));
-    fill(0, 0, 100, 20);
+    strokeWeight(STROKE_WEIGHT);
+    stroke(R_, G_, B_);
+    fill(R_, B_, G_, 20);
     beginShape();
-    for(int i=0; i < 40; i++){
+    for(int i=0; i < NUM_LINES; i++){
 
       vertex(x1(t1+i), y1(t1+i));
       //println(x1(t1+i), y1(t1+i));
     }
 
     endShape();
-
-
-    //for (int i=0; i < 20; i++) {
-      //line(x1(t1+i), y1(t1+i), x1(t1+i+0.05), y1(t1+i+0.05));
-     // line(x1(t1+i), y1(t1+i),x1(t1+i)+1, y1(t1+i)+1);
-      //line(x1(t1 + i), y1(t1 + i), x1(t2 + i), y1(t2 + i));4
-    //}
-
-    //println("A: " + A + " B: " + B + " C: " + C);
 
     t1 += it1;
     t2 += it2;

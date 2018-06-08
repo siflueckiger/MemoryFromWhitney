@@ -1,6 +1,5 @@
 
 //**** LIBRARIES ****
-import themidibus.*;
 import oscP5.*;
 import netP5.*;
 
@@ -10,7 +9,6 @@ Object2 o2;
 Object3 o3;
 Object4 o4;
 
-MidiBus myBus;
 
 //**** OSC ****
 OscP5[] osc = new OscP5[5];
@@ -45,6 +43,7 @@ void setup() {
   B_ = 60;
   ALPHA_ = 80;
   CLR = color(R_, G_, B_, ALPHA_);
+  NUM_LINES = 127;
 
   //create objects
   o1 = new Object1();
@@ -54,7 +53,6 @@ void setup() {
 
   //start listening to midi controller
   //MidiBus.list();
-  myBus = new MidiBus(this, 0, 1);
 
   //start with specific object
   screenValue = 1;
@@ -80,7 +78,6 @@ void draw() {
     o4.show();
   }
 }
-
 
 void keyReleased() {
   //object handler (user input)
@@ -120,101 +117,6 @@ void keyReleased() {
   }
 }
 
-
-//**** MIDI CONTROLLER ****
-void controllerChange(int channel, int number, int value) {
-  //println(number);
-
-  //for all objects
-  switch(number) {
-    //color
-  case 21:
-    R_ = map(value, 0, 127, 0, 360);
-    break;
-  case 22:
-    G_ = map(value, 0, 127, 0, 100);
-    break;
-  case 23:
-    B_ = map(value, 0, 127, 0, 100);
-    break;
-  case 24:
-    ALPHA_ = map(value, 0, 127, 1, 80);
-    break;
-  }
-
-  CLR = color(R_, G_, B_, ALPHA_);
-
-  //for specific objects
-  if (screenValue == 1) {
-    //Object1
-    switch(number) {
-    case 41:
-      NUM_LINES = int(map(value, 0, 127, 1, 500));
-      break;
-    case 42:
-      SCALE = int(map(value, 0, 127, 0, height - 100));
-      break;
-    case 43:
-      STROKE_WEIGHT = int(map(value, 0, 127, 0, 10));
-      break;
-    case 47:
-      o1.it1 = map(value, 0, 127, 0, 0.05);
-      break;
-    case 48:
-      o1.it2 = map(value, 0, 127, 0, 0.05);
-      break;
-    }
-  } else if (screenValue == 2) {
-    //Object2
-    switch(number) {
-    case 25:
-      o2.xPos1 = int(map(value, 0, 127, -width/2, width/2));
-      break;
-    case 26:
-      o2.yPos1 = int(map(value, 0, 127, -height/2, height/2));
-      break;
-    case 45:
-      o2.xPos2 = int(map(value, 0, 127, -width/2, width/2));
-      break;
-    case 46:
-      o2.yPos2 = int(map(value, 0, 127, -height/2, height/2));
-      break;
-    case 41:
-      NUM_LINES = int(map(value, 0, 127, 0, 500));
-      break;
-    case 42:
-      o2.dia1 = int(map(value, 0, 127, 5, height/2));
-      break;
-    case 43:
-      o2.dia2 = int(map(value, 0, 127, 5, height/2));
-      break;
-    case 44:
-      STROKE_WEIGHT = int(map(value, 0, 127, 1, 20));
-      break;
-    case 47:
-      o2.it1 = map(value, 0, 127, 0, 0.5);
-      break;
-    case 48:
-      o2.it2 = map(value, 0, 127, 0, 0.5);
-      break;
-    }
-  } else if (screenValue == 4) {
-    //Object4
-    switch(number) {
-    case 41:
-      o4.A = int(map(value, 0, 127, 1, 100));
-      break;
-    case 42:
-      o4.B = int(map(value, 0, 127, 1, 100));
-      break;
-    case 43:
-      o4.C = int(map(value, 0, 127, 1, 100));
-      break;
-    }
-  }
-}
-
-
 //**** OSC receiver ****
 void oscEvent(OscMessage theOscMessage) {
   if (theOscMessage.addrPattern().equals("/CrappyBird")) {
@@ -238,36 +140,73 @@ void oscEvent(OscMessage theOscMessage) {
       //object1
       o1.it1 = map(vol, 0, 1, 0.0001, 0.06);
       o1.it2 = map(vol, 0, 1, 0.001, 0.1);
+      o1.t1 += score/100;
 
       //object2
       o2.it1 = map(vol, 0, 1, 0.0001, 0.2);
       o2.it2 = map(vol, 0, 1, 0.001, 0.05);
+      o2.t1 += score/100;
+      o2.dia2 = highscore / 10;
 
       //object3
       o3.it1 = map(vol, 0, 1, 0.0001, 0.2);
       o3.it2 = map(vol, 0, 1, 0.001, 0.05);
+      o3.t1 += score/100;
+
 
       //object4
       o4.it1 = map(vol, 0, 1, 0.0001, 0.002);
       o4.it2 = map(vol, 0, 1, 0.0005, 0.01);
-
+      o4.t1 += score/100;
       break;
 
     case 2:
+      /*
       //object1
-      o1.it1 = 0.0001;
-      o1.it2 = 0.01;
-
-      //object2
-      o2.it1 = 0.0001;
-      o2.it2 = 0.01;
-
-      //object3
-      o3.it1 = 0.0001;
-      o3.it2 = 0.01;
+       o1.it1 = 0.0001;
+       o1.it2 = 0.01;
+       
+       //object2
+       o2.it1 = 0.0001;
+       o2.it2 = 0.01;
+       
+       //object3
+       o3.it1 = 0.0001;
+       o3.it2 = 0.01;
+       */
       //println("game over");
       break;
     }
+  }
+
+  if (theOscMessage.addrPattern().equals("/YouFou")) {
+    float x = theOscMessage.get(0).floatValue();
+    float y = theOscMessage.get(1).floatValue();
+    int shotFired = theOscMessage.get(2).intValue();
+    int gameScreen = theOscMessage.get(3).intValue();
+
+    switch(gameScreen) {
+    case 0:
+      //println("initialize");
+
+      break;
+
+    case 1:
+      //println("playing");
+      o2.xPos2 = x * width;
+      o2.yPos2 = y * height;
+
+      if (shotFired == 1) {
+        screenValue = int(random(1, 4));
+      }
+      break;
+
+    case 2:
+
+      break;
+    }
+
+    //println("CamA osc received ", x, y, r);
   }
 
   if (theOscMessage.addrPattern().equals("/CamA")) {
@@ -276,7 +215,13 @@ void oscEvent(OscMessage theOscMessage) {
     float r = theOscMessage.get(2).floatValue();
 
     //general variables
-    SCALE = int(x * (height - 100));
+    SCALE = int(r * (height - 100));
+    R_ = int(map(x, 0, 1, 0, 255));
+    G_ = int(map(y, 0, 1, 0, 255));
+    B_ = int(map(x+y, 0, 2, 0, 255));
+
+    //object1
+    STROKE_WEIGHT = int(map(r, 0, 1, 1, 10));
 
     //object2
     o2.xPos1 = map(x, 0, 1, - width/2, width/2);
@@ -289,6 +234,10 @@ void oscEvent(OscMessage theOscMessage) {
   if (theOscMessage.addrPattern().equals("/TotalVolume")) {
 
     float totVol = theOscMessage.get(0).floatValue();
+    o1.t2 += totVol / 100;
+    o2.t2 += totVol / 100;
+    o3.t2 += totVol / 100;
+    o4.t2 += totVol / 100;
 
     //println("TotalVolume osc received: ", totVol);
   }
@@ -298,7 +247,13 @@ void oscEvent(OscMessage theOscMessage) {
     int note = theOscMessage.get(0).intValue();
     int noteStatus = theOscMessage.get(1).intValue();
     //println("MIDI: ", note, noteStatus);
-
+    
+    if(noteStatus > 0){
+      o4.A = random(10, 329);
+      o4.B = random(2, 4312);
+      o4.C = random(54, 8745);
+    }
+    
     BG_CLR = color(note, 0, 0);
     NUM_LINES = int(map(note, 0, 127, 10, 100));
   }
@@ -307,20 +262,30 @@ void oscEvent(OscMessage theOscMessage) {
 
     int note = theOscMessage.get(0).intValue();
     int noteStatus = theOscMessage.get(1).intValue();
+    
+    if(noteStatus > 0){
+      o4.A = random(10, 329);
+      o4.B = random(2, 4312);
+      o4.C = random(54, 8745);
+    }
 
     BG_CLR = color(0, note, 0);
     NUM_LINES = int(map(note, 0, 127, 10, 100));
     //println("MIDI: ", note, noteStatus);
   }
 
-
-
   if (theOscMessage.addrPattern().equals("/M3")) {
 
     int note = theOscMessage.get(0).intValue();
     int noteStatus = theOscMessage.get(1).intValue();
     //println("MIDI: ", note, noteStatus);
-
+    
+    if(noteStatus > 0){
+      o4.A = random(10, 329);
+      o4.B = random(2, 4312);
+      o4.C = random(54, 8745);
+    }
+    
     BG_CLR = color(0, note, note);
     NUM_LINES = int(map(note, 0, 127, 10, 100));
   }

@@ -9,10 +9,8 @@ class Object3 {
 
 
   void init() {
-    println("init object 3");
-    NUM_LINES = 13;
     it1 = 0.001;
-    it2 = 0.01;
+    it2 = 0.02;
   }
 
   void show() {
@@ -20,15 +18,11 @@ class Object3 {
 
     translate(width/2, height/2);
 
-    strokeWeight(1);
-    stroke(100, 100, 100);
-
-    println(NUM_LINES);
-
     for (int i=0; i < NUM_LINES; i++) {
-      line(x1(t1+i, t2+1), y1(t1+i, t2+i), x1(t2+i, t1+1), y1(t2+i, t1+1));
+      noStroke();
+      fill(R_, G_, B_, 15);
+      triangle(x1(t2+i, t1+1), y1(t1+i, t2+i), x1(t1+i, t2+1), y1(t1+i, t2+i), x1(t2+i, t1+1), y1(t2+i, t1+1));
     }
-
 
     t1 += it1;
     t2 += it2;
@@ -36,10 +30,10 @@ class Object3 {
 
 
   float x1(float _t1, float _t2) {
-    return pow(sin(_t1), 3) * 200 + pow(cos(_t2), 3) * 200 ;
+    return pow(sin(_t1), 3) * 300 + pow(cos(_t2), 3) * 200 ;
   }
 
   float y1(float _t1, float _t2) {
-    return cos(_t1) * 50 + pow(sin(_t2), 3) + 90;
+    return cos(_t1) * 500 + pow(sin(_t2), 3) + 90;
   }
 }
