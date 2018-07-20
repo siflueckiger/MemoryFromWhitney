@@ -22,7 +22,7 @@ class Object1 {
     ALPHA_ = 127;
     CLR = color(R_, G_, B_, ALPHA_);
 
-    println("init object 1");
+    //println("init object 1");
 
   }
 

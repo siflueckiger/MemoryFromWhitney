@@ -47,15 +47,15 @@ float youFouY = 1;
 PVector points[] = new PVector[npoints];
 
 void setup() {
-  fullScreen(3);
+  fullScreen(3); // if more than one screen choose screen
   //size(800, 800);
   noCursor();
 
   background(BG_CLR);
 
-  radius = height*.9/2;
-  xcenter = width/2;
-  ycenter = height/2;
+  radius  = height * 0.9 / 2;
+  xcenter = width  / 2;
+  ycenter = height / 2;
 
   noStroke();
   fill(255);
@@ -71,12 +71,13 @@ void setup() {
 }
 
 void draw() {
-  background(BG_CLR); // erase
+  background(BG_CLR); // clear background every frame
 
   float ftime = millis() * 0.0001 * speed;
   float step = ftime * stepstart + (ftime * (stepend - stepstart)); //stepend + iStep;
   background(BG_CLR);
 
+  // calculate points
   for (int i=0; i < points.length; i++) {
     float a = 2 * PI * step * i;
 
@@ -87,6 +88,7 @@ void draw() {
     points[i].set(x, height-y);
   }
 
+  // draw points/lines/triangles
   for (int i=0; i < points.length-2; i++) {
     switch(drawStyle) {
     case 0:
@@ -133,19 +135,17 @@ void oscEvent(OscMessage theOscMessage) {
 
     //check game gameStatus
     switch(gameStatus) {
-    case 0:
+    case 0: // init screen?
       alpha = 255;
       break;
 
-    case 1:
-
+    case 1: // when someone is playing
       CrappyBird = int(map(vol, 0, 1, 1, 5));
       diameter = map(vol, 0, 1, 1, 100);
       alpha = int(map(vol, 0, 1, 125, 5));
-
       break;
 
-    case 2:
+    case 2: // gameover?
       diameter = 4;
       alpha = 5;
       break;
